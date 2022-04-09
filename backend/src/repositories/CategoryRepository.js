@@ -1,37 +1,51 @@
-const { tratarErro } = require('../utils/logUtils')
-
-const Category = require('../models/Category')
-const database = require('../config/Database')
+const CategoryModel = require('../database/models/CategoryModel')
 
 class CategoryRepository {
-    
-    async save(item) {
-        let connection
-        
-        try {
-            if (item instanceof Category) {
-                const category = await Category.create(item)
-            }
-        } catch(error) {
-            console.log('Erro ao salvar a categoria', error.message)
-        } finally {
-            connection.end()
-        }
+  async add(category) {
+    try {
+      return await CategoryModel.create(category)
+    } catch (error) {
+      console.log(error.message)
     }
-    
-    async getAll() {
-        let connection
-        
-        try {
-            const result = await Category.findAll()
-            return [...result]
-        } catch (error) {
-            console.log('Erro ao listar categorias', error.message)
-        } finally {
-            connection.end()
-        }
+  }
+
+  async selectAll() {
+    try {
+      return await CategoryModel.findAll()
+    } catch (error) {
+      console.log(error.message)
     }
-    
+  }
+
+  async selectByFilter(filter) {
+    try {
+      return await CategoryModel.findAll({
+        where: filter
+      })
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  async update(category) {
+    try {
+      return await category.save()
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  async remove(id) {
+    try {
+      return await CategoryModel.destroy({
+        where: {
+          id
+        }
+      })
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 }
 
 module.exports = CategoryRepository
