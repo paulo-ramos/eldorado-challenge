@@ -1,4 +1,5 @@
 const DeviceModel = require('../database/models/DeviceModel')
+const CategoryModel = require('../database/models/CategoryModel')
 
 class DeviceRepository {
   async add(device) {
@@ -11,7 +12,7 @@ class DeviceRepository {
 
   async selectAll() {
     try {
-      return await DeviceModel.findAll()
+      return await DeviceModel.findAll({ include: [ { model: CategoryModel } ] })
     } catch (error) {
       console.log(error.message)
     }
