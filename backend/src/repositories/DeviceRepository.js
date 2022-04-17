@@ -1,9 +1,9 @@
-const CategoryModel = require('../database/models/CategoryModel')
+const DeviceModel = require('../database/models/DeviceModel')
 
-class CategoryRepository {
-  async add(category) {
+class DeviceRepository {
+  async add(device) {
     try {
-      return await CategoryModel.create(category)
+      return await DeviceModel.create(device)
     } catch (error) {
       console.log(error.message)
     }
@@ -11,7 +11,7 @@ class CategoryRepository {
 
   async selectAll() {
     try {
-      return await CategoryModel.findAll()
+      return await DeviceModel.findAll()
     } catch (error) {
       console.log(error.message)
     }
@@ -19,7 +19,7 @@ class CategoryRepository {
 
   async selectByFilter(filter) {
     try {
-      return await CategoryModel.findAll({
+      return await DeviceModel.findAll({
         where: filter
       })
     } catch (error) {
@@ -27,9 +27,9 @@ class CategoryRepository {
     }
   }
 
-  async update(id, key, category) {
+  async update(id, key, device) {
     try {
-      return await CategoryModel.update(category,{where: {id:id, key:key}})
+      return await DeviceModel.update(device,{where: {id:id, key:key}})
     } catch (error) {
       console.log(error.message)
     }
@@ -37,11 +37,11 @@ class CategoryRepository {
 
   async delete(id, key) {
     try {
-      return await CategoryModel.destroy({where: {id:id, key:key}})
+      return await DeviceModel.destroy({where: {id:id, key:key}})
     } catch (error) {
       console.log(error.message)
     }
   }
 }
 
-module.exports = CategoryRepository
+module.exports = DeviceRepository

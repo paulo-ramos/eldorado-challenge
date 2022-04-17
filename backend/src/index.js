@@ -1,4 +1,4 @@
-const { tratarErro } = require('./utils/logUtils')
+//const { tratarErro } = require('./utils/logUtils')
 
 const CategoryRepository = require('./repositories/CategoryRepository')
 const database = require('../config/Database')

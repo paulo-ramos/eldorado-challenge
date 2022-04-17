@@ -5,7 +5,7 @@ class CategoryController {
     this.repository = new CategoryRepository()
   }
 
-  async get(request, response) {
+  get = async (request, response) => {
     try {
       const categories = await this.repository.selectAll()
   
@@ -15,7 +15,7 @@ class CategoryController {
     }
   }
 
-  async getOne(request, response) {
+  getOne = async (request, response) => {
     try {
       const { id } = request.params
 
@@ -27,12 +27,11 @@ class CategoryController {
     }
   }
 
-  async post(request, response) {
+  post = async (request, response) => {
     try {
-      const { key, name } = request.body
+      const { name } = request.body
 
       const newCategory = {
-        key,
         name
       }
 
@@ -44,34 +43,59 @@ class CategoryController {
     }
   }
 
-  async update(request, response) {
+  put = async (request, response) => {
     try {
-      const { id } = request.params
-      const { key, name } = request.body
+      const { id, key } = request.params
+      const { name } = request.body
 
-      const categToEdit = {
-        id: parseInt(id),
-        key,
+      const putCategory = {
         name
       }
 
-      const categsEdited = await this.repository.update(categToEdit)
-  
-      if (categsEdited > 0) {
-        return response.status(200).json({ message: `Category ${id} edited`, categ: categsEdited })
-      } else {
-        return response.status(404).json({ message: 'Category not found' })
+      console.log(id)
+      console.log(key)
+      console.log(name)
+
+      const categUpdated = await this.repository.update(id, key, putCategory)
+
+      if (categUpdated>0){
+        return response.status(200).json({ categ: categUpdated })
       }
+      return response.status(404).json({ message: 'Category not found' })
+  
+      
     } catch (error) {
       return response.status(400).json({ error: error.message })
     }
   }
 
-  async delete(request, response) {
+  patch = async (request, response) => {
     try {
-      const { id } = request.params
+      const { id, key } = request.params
+      const { name } = request.body
 
-      const categsRemoved = await this.repository.remove(parseInt(id))
+      const patchCategory = {
+        name
+      }
+
+      const categUpdated = await this.repository.update(id, key, patchCategory)
+
+      if (categUpdated>0){
+        return response.status(200).json({ categ: categUpdated })
+      }
+      return response.status(404).json({ message: 'Category not found' })
+  
+      
+    } catch (error) {
+      return response.status(400).json({ error: error.message })
+    }
+  }
+
+  delete = async (request, response) => {
+    try {
+      const { id, key } = request.params
+
+      const categsRemoved = await this.repository.delete(id, key)
   
       if (categsRemoved > 0) {
         return response.status(200).json({ message: `Category ${id} deleted` })

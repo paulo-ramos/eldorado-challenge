@@ -2,7 +2,7 @@
 
 module.exports = {
 	async up (queryInterface, Sequelize) {
-		await queryInterface.createTable('categories', { 
+		await queryInterface.createTable('devices', { 
 			id: {
 				type: Sequelize.INTEGER,
 				autoIncrement: true,
@@ -19,23 +19,44 @@ module.exports = {
 				type: Sequelize.STRING(128),
 				allowNull: false,
 			},
+			color: {
+				type: Sequelize.STRING(16),
+				isAlpha: true,
+				allowNull: false
+			},
+			partNumber: {
+				type: Sequelize.INTEGER,
+				isInt: true,
+				min: 0,
+				allowNull: false
+			},
+			categoryId:{
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				references:{
+					model: 'categories',
+					key: 'id',					
+				}
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,
-				defaultValue: Sequelize.DATE,
+				defaultValue: Sequelize.NOW,
 			},
 			updatedAt: {
 				allowNull: false,
 				type: Sequelize.DATE,
-				defaultValue: Sequelize.DATE,
+				defaultValue: Sequelize.NOW,
 			},
 			deletedAt: {
 				type: Sequelize.DATE,
-			},
+			}
 		})
 	},
 	
 	async down (queryInterface, Sequelize) {
-		await queryInterface.dropTable('categories')
+		await queryInterface.dropTable('devices')
 	}
 };
+
+

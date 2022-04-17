@@ -8,4 +8,4 @@ module.exports = {
     charset: 'utf8',
     collate: 'utf8_general_ci',
     useUTC: true,
-  }
+}
