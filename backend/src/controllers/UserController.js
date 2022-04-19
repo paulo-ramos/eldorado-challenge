@@ -1,4 +1,8 @@
+const authentication = require('../config/authentication')
 const UserRepository = require('../repositories/UserRepository')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
+const UserModel = require('../database/models/UserModel')
 
 class UserController {
   constructor() {
@@ -34,12 +38,38 @@ class UserController {
       const newUser = {
         name: name,
         email: email,
-        password: password
+        password:  bcrypt.hashSync(password, 5)
       }
 
       const userAdded = await this.repository.add(newUser)
   
       return response.status(200).json({ user: userAdded })
+    } catch (error) {
+      return response.status(400).json({ error: error.message })
+    }
+  }
+
+  login = async (request, response) => {
+    try {
+      const { email, password } = request.body
+
+      const user = await this.repository.selectByFilter({ email: email })
+
+      if (email === user.email && bcrypt.compareSync(password, user.password, 5) ) {
+
+        const token = jwt.sign({ email, data: Date() }, authentication.secreteKey, authentication.options)
+
+        return response.status(200).json({ 
+          user: {id : user.id, 
+                 key : user.key, 
+                 name: user.name, 
+                 email: user.email
+                }, 
+          date:  Date.now(),
+          token: token } );
+      }
+      return response.status(400).json({ mensagem: 'Invalid User name or password.' })
+
     } catch (error) {
       return response.status(400).json({ error: error.message })
     }
@@ -53,7 +83,7 @@ class UserController {
       const putUser = {
         name: name,
         email: email,
-        password: password
+        password:  bcrypt.hashSync(password, 5)
       }
 
       const userUpdated = await this.repository.update(id, key, putUser)
@@ -77,7 +107,7 @@ class UserController {
       const patchUser = {
         name: name,
         email: email,
-        password: password
+        password:  bcrypt.hashSync(password, 5)
       }
 
       const userUpdated = await this.repository.update(id, key, patchUser)

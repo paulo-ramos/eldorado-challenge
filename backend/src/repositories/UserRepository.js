@@ -19,7 +19,7 @@ class UserRepository {
 
   async selectByFilter(filter) {
     try {
-      return await UserModel.findAll({
+      return await UserModel.findOne({
         where: filter
       })
     } catch (error) {
