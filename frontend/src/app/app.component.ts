@@ -27,7 +27,7 @@ export class AppComponent {
 				label: 'Device',
 				icon: 'pi pi-fw pi-tags',
 				routerLink: '/device'
-			}	
+			}
 		];
 	}
 }
