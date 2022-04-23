@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './device.component.html',
   styleUrls: ['./device.component.sass']
 })
+
 export class DeviceComponent implements OnInit {
 
   constructor() { }
