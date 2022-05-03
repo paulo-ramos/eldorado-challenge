@@ -1,17 +1,18 @@
-const DeviceRepository = require('../repositories/DeviceRepository')
+const Device = require('../models/Device')
+const { createResponseContent, createResponseErrors } = require('../utils/responseBuilder')
 
 class DeviceController {
-  constructor() {
-    this.repository = new DeviceRepository()
+  constructor(repository) {
+    this.repository = repository
   }
 
   get = async (request, response) => {
     try {
       const devices = await this.repository.selectAll()
   
-      return response.status(200).json({ devices })
+      return response.status(200).json(createResponseContent(devices))
     } catch (error) {
-      return response.status(400).json({ error: error.message })
+      return response.status(400).json(createResponseErrors([ error.message ]))
     }
   }
 
@@ -19,85 +20,57 @@ class DeviceController {
     try {
       const { id } = request.params
 
-      const devices = await this.repository.selectByFilter({ id: parseInt(id) })
+      const device = await this.repository.selectByFilter({ id: parseInt(id) })
   
-      return response.status(200).json({ devices })
+      return response.status(200).json(createResponseContent(device))
     } catch (error) {
-      return response.status(400).json({ error: error.message })
+      return response.status(400).json(createResponseErrors([ error.message ]))
     }
   }
 
   post = async (request, response) => {
     try {
-      const { name, color, partNumber, categoryId } = request.body
+      const { name, color, partNumber, deviceId } = request.body
 
-      const newDevice = {
-        name: name,
-        color: color,
-        partNumber: partNumber,
-        categoryId: categoryId
+      const newDevice = new Device(name,color,partNumber,deviceId)
+
+      if (!newDevice.valid()) {
+        return response.status(400).json(createResponseErrors([ 'Invalid device' ]))
       }
 
       const deviceAdded = await this.repository.add(newDevice)
   
-      return response.status(200).json({ device: deviceAdded })
+      return response.status(200).json(createResponseContent(deviceAdded))
     } catch (error) {
-      return response.status(400).json({ error: error.message })
+      return response.status(400).json(createResponseErrors([ error.message ]))
     }
   }
 
   put = async (request, response) => {
     try {
       const { id, key } = request.params
+      const { name, color, partNumber, deviceId } = request.body
 
-      const { name, color, partNumber, categoryId } = request.body
-
-      const putDevice = {
+      const deviceToEdit = {
         name: name,
         color: color,
         partNumber: partNumber,
-        categoryId: categoryId
+        deviceId: deviceId
       }
 
-      console.log(id)
-      console.log(key)
-      console.log(name)
-
-      const deviceUpdated = await this.repository.update(id, key, putDevice)
-
-      if (deviceUpdated>0){
-        return response.status(200).json({ device: deviceUpdated })
+      if (!deviceToEdit.valid()) {
+        return response.status(400).json(createResponseErrors([ 'Invalid device' ]))
       }
-      return response.status(404).json({ message: 'Device not found' })
+
+      const deviceEdited = await this.repository.update({ id: parseInt(id), ...deviceToEdit })
   
-      
-    } catch (error) {
-      return response.status(400).json({ error: error.message })
-    }
-  }
-
-  patch = async (request, response) => {
-    try {
-      const { id, key } = request.params
-      const { name, color, partNumber, categoryId } = request.body
-
-      const patchDevice = {
-        name: name,
-        color: color,
-        partNumber: partNumber,
-        categoryId: categoryId
+      if (deviceEdited > 0) {
+        return response.status(200).json(createResponseContent(deviceEdited))
+      } else {
+        return response.status(404).json(createResponseErrors([ 'Device not found' ]))
       }
-
-      const deviceUpdated = await this.repository.update(id, key, patchDevice)
-
-      if (deviceUpdated>0){
-        return response.status(200).json({ device: deviceUpdated })
-      }
-      return response.status(404).json({ message: 'Device not found' })
-  
-      
     } catch (error) {
-      return response.status(400).json({ error: error.message })
+      return response.status(400).json(createResponseErrors([ error.message ]))
     }
   }
 
@@ -105,17 +78,17 @@ class DeviceController {
     try {
       const { id, key } = request.params
 
-      const devicesRemoved = await this.repository.delete(id, key)
+      const deviceRemoved = await this.repository.remove(parseInt(id), key)
   
-      if (devicesRemoved > 0) {
-        return response.status(200).json({ message: `Device ${id} deleted` })
+      if (deviceRemoved > 0) {
+        return response.status(200).json(createResponseContent({ id }))
       } else {
-        return response.status(404).json({ message: 'Device not found' })
+        return response.status(404).json(createResponseErrors([ 'Device not found' ]))
       }
     } catch (error) {
-      return response.status(400).json({ error: error.message })
+      return response.status(400).json(createResponseErrors([ error.message ]))
     }
   }
 }
 
-module.exports = new DeviceController()
+module.exports = DeviceController

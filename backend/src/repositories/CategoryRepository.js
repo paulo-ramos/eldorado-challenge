@@ -11,6 +11,7 @@ class CategoryRepository {
 
   async selectAll() {
     try {
+      console.log('entrei...')
       return await CategoryModel.findAll()
     } catch (error) {
       console.log(error.message)
@@ -35,7 +36,7 @@ class CategoryRepository {
     }
   }
 
-  async delete(id, key) {
+  async remove(id, key) {
     try {
       return await CategoryModel.destroy({where: {id:id, key:key}})
     } catch (error) {

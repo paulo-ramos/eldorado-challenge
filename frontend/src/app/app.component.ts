@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 
+
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.sass']
+	styleUrls: ['./app.component.sass'],
 })
 
 export class AppComponent {
 	title = 'frontend';
 	items: MenuItem[] = [];
+	users: MenuItem[] = [];
 	
 	ngOnInit() {
 		this.items = [
@@ -27,7 +29,14 @@ export class AppComponent {
 				label: 'Device',
 				icon: 'pi pi-fw pi-tags',
 				routerLink: '/device'
+			},
+			{
+				label: 'Logout',
+				icon: 'pi pi-fw pi-power-off',
+				routerLink: '/logout'
 			}
 		];
+
+		
 	}
 }

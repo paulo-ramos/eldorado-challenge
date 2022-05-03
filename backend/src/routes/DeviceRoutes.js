@@ -1,13 +1,14 @@
 const express = require('express')
-const DeviceController = require('../controllers/DeviceController')
+const Controllers = require('../controllers')
+
+const controller = Controllers.DeviceController
 
 const router = express.Router()
 
-router.get('/', DeviceController.get)
-router.get('/:id', DeviceController.getOne)
-router.post('/', DeviceController.post)
-router.put('/:id/:key', DeviceController.put)
-router.patch('/:id/:key', DeviceController.patch)
-router.delete('/:id/:key', DeviceController.delete)
+router.get('/', controller.get)
+router.get('/:id', controller.getOne)
+router.post('/', controller.post)
+router.put('/:id/:key', controller.put)
+router.delete('/:id/:key', controller.delete)
 
 module.exports = router

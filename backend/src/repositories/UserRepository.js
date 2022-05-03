@@ -35,7 +35,7 @@ class UserRepository {
     }
   }
 
-  async delete(id, key) {
+  async remove(id, key) {
     try {
       return await UserModel.destroy({where: {id:id, key:key}})
     } catch (error) {

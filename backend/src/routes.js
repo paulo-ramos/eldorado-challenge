@@ -1,12 +1,9 @@
-const auth = require('./middlewares/auth')
-const CategoryRoutes = require('./routes/CategoryRoutes')
-const DeviceRoutes = require('./routes/DeviceRoutes')
-const UserRoutes = require('./routes/UserRoutes')
+const routes = require('./routes/index')
 
 const registerRoutes = (app) => {
-  app.use('/category', auth, CategoryRoutes),
-  app.use('/device', auth,DeviceRoutes),
-  app.use('/user', UserRoutes)
+  for (const route of routes) {
+    app.use(route.name, route.router)
+  }
 }
 
 module.exports = { registerRoutes }

@@ -1,4 +1,4 @@
-const DeviceModel = require('../database/models/DeviceModel')
+const DeviceModel   = require('../database/models/DeviceModel')
 const CategoryModel = require('../database/models/CategoryModel')
 
 class DeviceRepository {
@@ -36,7 +36,7 @@ class DeviceRepository {
     }
   }
 
-  async delete(id, key) {
+  async remove(id, key) {
     try {
       return await DeviceModel.destroy({where: {id:id, key:key}})
     } catch (error) {

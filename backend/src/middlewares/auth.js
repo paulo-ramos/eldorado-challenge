@@ -1,23 +1,21 @@
 const jwt = require('jsonwebtoken')
-const authentication = require('../config/authentication')
+const authConfig = require('../config/authentication')
 
 function auth(request, response, next) {
-  const bearerToken = request.headers.authorization
+  const { authorization } = request.headers
 
-  console.log(bearerToken)
-
-  if (bearerToken === null || bearerToken === undefined) {
-    return response.status(400).json({ mensagem: 'Token não informado' })
+  if (authorization === null || authorization === undefined) {
+    return response.status(404).json({ message: 'Token not found' })
   }
 
-  const token = bearerToken.split(' ')[1]
+  const token = authorization.split(' ')[1]
 
   try {
-    jwt.verify(token, authentication.secreteKey)
+    jwt.verify(token, authConfig.secreteKey, authConfig.options)
 
     next()
   } catch (error) {
-    return response.status(401).json({ mensagem: 'Não autorizado' })
+    return response.status(401).json({ message: 'No autorize' })
   }
 }
 

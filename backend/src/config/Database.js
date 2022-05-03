@@ -1,7 +1,7 @@
 module.exports = {
-    database: 'eldorado',
-    username: 'root',
-    password: '1q2w3e4r@#$',
+    database: 'eldorado', //process.env.DB_NAME,
+    username: 'root', //process.env.DB_USER,
+    password: '1q2w3e4r@#$', //process.env.DB_PASSWORD,
     dialect: 'mysql',
     host: 'localhost',
     port: 3306,

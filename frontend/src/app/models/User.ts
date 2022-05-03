@@ -1,10 +1,9 @@
-export default class Auth {
-    token: string = '';
+export default class User {
     user!: {
       id: string;
       key: string;
       name: string;
       email: string;
-    }; 
-    logonDate!: Date;
+      createdAt: String;
+    }
   }
